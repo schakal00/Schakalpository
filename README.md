@@ -1,5 +1,20 @@
 # CECS – BTC/USD Research
 
+## NEU: CECS 3.0 – defensives BTC-Trendsystem mit täglichem Paper-Journal
+
+**Forschungsstatus: Historisch profitabel, aber prospektiv nicht validiert. Keine Echtgeld-Orders.**
+
+- **[Das komplette CECS-3.0-Regelwerk, Renditen und Risiken auf Deutsch](CECS_3_0_STRATEGIE_DE.md)**
+- **[Aktuelles virtuelles CECS3-Konto](cecs3_forward/state.json)** und **[datierte Tagesbeobachtungen](cecs3_forward/observations/)**
+- **[Erfolgreicher 09:00-UTC-Backtest über acht Bitstamp-Jahrgänge](https://github.com/schakal00/Schakalpository/actions/runs/45030529487)**
+- **[Erfolgreicher täglicher Paper-Workflow mit 19 bestandenen Tests und gesperrten Abhängigkeiten](https://github.com/schakal00/Schakalpository/actions/runs/45031089715)**
+
+**So arbeitet die vorab definierte Hauptstrategie:** nur BTC/USD Spot, maximal 25 % BTC wenn Schlusskurs über SMA200 und SMA50 über SMA200. Bei hohem Volatilitätsrisiko (>80 % annualisierte 30-Tage-Volatilität) oder Schlusskurs unter SMA50 wird die BTC-Position auf 12,5 % reduziert. Bei Trendverlust geht sie auf 0 %. Umschichtung montags bzw. schnellere Risikoreduktion, ohne Kredit/Shorts.
+
+**Echte historische Zahlen der Minutenpreis-Simulation 2022–08.09.2026:** **+13,95 %** Rendite nach 15 bps Gebühren/Slippage und zusätzlich 2 bps Halbspread pro Orderseite bei **−9,39 %** maximalem Tages-Drawdown. **2025 aber −6,54 %.** Die Zahlen stammen aus bereits bekannten historischen Kursverläufen und sind **kein zukünftiger Gewinnnachweis**.
+
+**Paper-Stand am 22.11.2026:** 100.000 USD virtuelles Startkapital, 0 BTC, keine simulierte Transaktion. GitHub Actions soll gegen 09:35 UTC täglich prüfen; tatsächliche Startzeit kann variieren. Der Paper-Simulator verwendet *frisch beobachtetes Bitstamp Bid/Ask*, nicht einen bereits vergangenen Kurs. Strategieregeln und alle sechs signalrelevanten Quellen sind gegen unbemerkte Änderungen geschützt.
+
 ## Aktuell: CECS 2.8 – Drei echte prospektive **virtuelle** Vergleichskonten
 
 - **[Erster erfolgreicher Forward-Vergleich und Forschungsregeln (Deutsch)](CECS_2_8_FORWARD_VERGLEICH_DE.md)**
