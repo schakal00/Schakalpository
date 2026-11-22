@@ -1,5 +1,14 @@
 # CECS – BTC/USD Research
 
+## Neu: CECS 2.5 – echtes prospektives Paper-Journal (ohne Echtgeld)
+
+- **[Aktuellen Paper-Kontostand und sämtliche Einschränkungen lesen](CECS_2_5_PAPER_DE.md)**
+- **[Erste datierte Paper-Beobachtung vom 22.11.2026](paper_execution/observations/2026-11-22.json)**
+- **[Erster erfolgreicher Paper-Cloud-Lauf, 20 Tests](https://github.com/schakal00/Schakalpository/actions/runs/45012628339)**
+- [Virtueller State](paper_execution/state.json) · [Ausführungscode](paper_engine.py)
+
+**Start: 100.000 USD virtuelles Geld, kein Trade, aktuelle Paper-Rendite 0 %.** Einstiegsvorhaben werden frühestens am Folgetag zu einem dann frisch erfassten Bitstamp-Briefkurs virtuell ausgeführt. Verkäufe nutzen den erfassten Geldkurs; 15 Basispunkte Kosten pro Seite sind angenommen. **Die tägliche Abfrage bildet Intraday-Stop-Trigger nicht zuverlässig ab.** Keine echten Orders, keine API-Schlüssel.
+
 ## Neu: CECS 2.4 – tägliche Vorwärtsbeobachtung ab 22.11.2026
 
 - **[Warum wir die Strategie jetzt einfrieren, statt die Vergangenheit zu optimieren](CECS_2_4_FORWARD_DE.md)**
