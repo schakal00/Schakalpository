@@ -31,8 +31,9 @@ WINDOW_VECTOR=7
 WINDOW_CYCLE=45
 WINDOW_WAVE=60
 START=200
-MODELS=("BuyHoldSpot","TrendSpot","TrendRisk","TrendVector","TrendCycle",
-        "TrendElliott","TrendScore1","TrendScore2")
+MODELS=("BuyHoldSpot","TrendSpot","TrendSpotQuarter","TrendRisk",
+        "TrendWide6","TrendWide10","TrendVectorWide6","TrendCycleWide6",
+        "TrendVector","TrendCycle","TrendElliott","TrendScore1","TrendScore2")
 
 
 def indicators(bars):
@@ -91,11 +92,11 @@ def entry_gate(b,model):
         return True
     if not b["trend"]:
         return False
-    if model in ("TrendSpot","TrendRisk"):
+    if model in ("TrendSpot","TrendSpotQuarter","TrendRisk","TrendWide6","TrendWide10"):
         return True
-    if model=="TrendVector":
+    if model in ("TrendVector","TrendVectorWide6"):
         return b["vector_confirmed"]
-    if model=="TrendCycle":
+    if model in ("TrendCycle","TrendCycleWide6"):
         return b["cycle"]
     if model=="TrendElliott":
         return b["elliott"]
@@ -159,12 +160,14 @@ def backtest(bars,model):
                     allocation=0.
                 init_stop=None
                 unit_risk=None
-            elif model=="TrendSpot":
-                allocation=cash/(x["open"]*(1+COST))
+            elif model in ("TrendSpot","TrendSpotQuarter"):
+                fraction=.25 if model=="TrendSpotQuarter" else 1.0
+                allocation=fraction*cash/(x["open"]*(1+COST))
                 init_stop=None
                 unit_risk=None
             elif i-last_exit>COOLDOWN:
-                init_stop=yesterday["close"]-STOP_ATR*yesterday["atr"] if yesterday["atr"] else None
+                atr_factor=(10. if model=="TrendWide10" else 6. if model in ("TrendWide6","TrendVectorWide6","TrendCycleWide6") else STOP_ATR)
+                init_stop=yesterday["close"]-atr_factor*yesterday["atr"] if yesterday["atr"] else None
                 unit_risk=x["open"]*(1+COST)-init_stop*(1-COST) if init_stop else None
                 allocation=min(RISK*cash/unit_risk,cash/(x["open"]*(1+COST))) if unit_risk and unit_risk>0 and init_stop<x["open"] else 0.
             else:
@@ -190,7 +193,8 @@ def backtest(bars,model):
             # End-of-day update, never applied to the earlier part of this candle.
             if stop is not None and x["atr"]:
                 highest=max(highest,x["high"])
-                stop=max(stop,highest-STOP_ATR*x["atr"])
+                atr_factor=(10. if model=="TrendWide10" else 6. if model in ("TrendWide6","TrendVectorWide6","TrendCycleWide6") else STOP_ATR)
+                stop=max(stop,highest-atr_factor*x["atr"])
             if i==len(bars)-1:
                 close_trade(i,x["close"],"end_of_sample")
         net=gross_equity(cash,qty,x["close"]) if qty>0 else cash
