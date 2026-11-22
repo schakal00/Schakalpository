@@ -111,7 +111,7 @@ def gross_equity(cash,quantity,mark,cost=COST):
     return cash+quantity*mark*(1-cost)
 
 
-def backtest(bars,model,cost=COST):
+def backtest(bars,model,cost=COST,force_close_end=True,return_state=False):
     cash=100000.
     qty=0.
     stop=None
@@ -195,7 +195,7 @@ def backtest(bars,model,cost=COST):
                 highest=max(highest,x["high"])
                 atr_factor=(10. if model=="TrendWide10" else 6. if model in ("TrendWide6","TrendVectorWide6","TrendCycleWide6") else STOP_ATR)
                 stop=max(stop,highest-atr_factor*x["atr"])
-            if i==len(bars)-1:
+            if force_close_end and i==len(bars)-1:
                 close_trade(i,x["close"],"end_of_sample")
         net=gross_equity(cash,qty,x["close"],cost) if qty>0 else cash
         peak=max(peak,net)
@@ -211,7 +211,9 @@ def backtest(bars,model,cost=COST):
                return_pct=round(100*(equity[-1]["equity"]/100000-1),3),
                max_mtm_drawdown_pct=round(100*drawdown,3),
                exposure_pct=round(100*exposure_bars/len(bars),2))
-    return stats,equity,trades
+    state=dict(quantity=qty, stop=stop, entry=entry, entry_index=entry_idx,
+               highest=highest, cash=cash, last_exit_index=last_exit)
+    return (stats,equity,trades,state) if return_state else (stats,equity,trades)
 
 
 def period_stats(equity):
