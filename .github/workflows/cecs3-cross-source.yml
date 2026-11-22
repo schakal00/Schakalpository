@@ -1,0 +1,35 @@
+name: CECS 3.0 Bitstamp cross-source data integrity
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'cecs3_data_audit.py'
+      - 'test_cecs3_data_audit.py'
+      - '.github/workflows/cecs3-cross-source.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  independent-cross-check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Independent price audit tests
+        run: python -m unittest -v test_cecs3_data_audit.py
+      - name: Cross-check raw daily BTC/USD against complete UTC daily aggregation of minutes
+        run: python cecs3_data_audit.py --years 2019 2020 2021 2022 2023 2024 2025 2026 --out results_cross_source
+      - name: Always archive agreement / disagreement details
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cecs3-bitstamp-data-integrity
+          path: results_cross_source/
+          retention-days: 90
+          if-no-files-found: warn
