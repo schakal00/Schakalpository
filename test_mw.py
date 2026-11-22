@@ -108,5 +108,25 @@ class MWWalkForwardTests(unittest.TestCase):
         self.assertEqual(s["return_pct"],0)
 
 
+    def test_entry_bar_target_exits_immediately_when_stop_untouched(self):
+        b=minutes(15)
+        signal=dict(model="WOnly",index=1,signal_time=b[1]["time"].isoformat(),
+                    daily_cycle=False,daily_elliott=False,vector=False)
+        b[1]["high"]=150
+        b[1]["low"]=99
+        stats,_,trades=m.simulate(b,[signal],set(),"WOnly")
+        self.assertEqual(len(trades),1)
+        self.assertEqual(trades[0]["reason"],"entry_bar_target")
+        self.assertGreater(trades[0]["pnl_usd"],0)
+
+    def test_never_reenter_on_exit_bar(self):
+        b=minutes(15)
+        signal=lambda i: dict(model="W1hMExit",index=i,signal_time=b[i]["time"].isoformat(),
+                    daily_cycle=False,daily_elliott=False,vector=False)
+        # A pending W entry signal exists at the exact bar of M exit.
+        _,_,trades=m.simulate(b,[signal(1),signal(3)],{3},"W1hMExit")
+        self.assertEqual(len(trades),1)
+        self.assertEqual(trades[0]["reason"],"confirmed_M_breakdown")
+
 if __name__=="__main__":
     unittest.main()
