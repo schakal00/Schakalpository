@@ -1,0 +1,35 @@
+name: CECS 2.6 W-M Vector historical audit
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'cecs_v2_6_mw.py'
+      - 'test_mw.py'
+      - '.github/workflows/cecs-mw.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  mw-research:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Causal M-W regression suite
+        run: python -m unittest -v test_mw.py
+      - name: Bitstamp minute archive 2019-2026 (15m W-M, 1h trend, daily cycle/elliott)
+        run: python cecs_v2_6_mw.py --years 2019 2020 2021 2022 2023 2024 2025 2026 --out results_mw
+      - name: Preserve manifest, chronological validation, trades, cost sensitivities
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cecs-2-6-wm-research
+          path: results_mw/
+          retention-days: 90
+          if-no-files-found: warn
