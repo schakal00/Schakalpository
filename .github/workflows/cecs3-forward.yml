@@ -33,6 +33,8 @@ jobs:
         run: |
           set -euo pipefail
           cat > /tmp/cecs3-frozen-blobs.txt <<'BLOBS'
+          e5714d2ea002e865ccea437d7e4ca2210b21bb14 cecs3_forward.py
+          c6f1b46c0257c83b01861a5e77fff452cc8d27cb paper_engine.py
           59ba6c85f095dde98f88c3b677cc7e0d3f111f68 cecs_v3_0_strategy.py
           aa1de2bd5f87c50fa9f647f6362db531c7ac9e8d cecs_v2_7_slow.py
           f7bba61da6956772e9e087e3ab9f5587f27ca9e0 cecs_v2_6_mw.py
