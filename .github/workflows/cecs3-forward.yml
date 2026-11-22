@@ -29,24 +29,25 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Verify all frozen strategy dependencies against launch commit
+      - name: Verify frozen Git blob identities of CECS3 strategy dependencies
         run: |
           set -euo pipefail
-          frozen="dc7fe3cbce7d5d0678581a22f78ff8b27c30d895"
-          for file in \
-            cecs_v3_0_strategy.py \
-            cecs_v2_7_slow.py \
-            cecs_v2_6_mw.py \
-            cecs_v2_3_trend.py \
-            cecs_v2_2_intraday.py \
-            cecs_v2_1_runner.py
-          do
-            git show "$frozen:$file" | cmp - "$file" || {
-              echo "::error::Frozen CECS3 dependency changed: $file. New model version required."
+          cat > /tmp/cecs3-frozen-blobs.txt <<'BLOBS'
+          59ba6c85f095dde98f88c3b677cc7e0d3f111f68 cecs_v3_0_strategy.py
+          aa1de2bd5f87c50fa9f647f6362db531c7ac9e8d cecs_v2_7_slow.py
+          f7bba61da6956772e9e087e3ab9f5587f27ca9e0 cecs_v2_6_mw.py
+          b5a68a3e89c71c8f9357ba29b7ba678bf5d1b45f cecs_v2_3_trend.py
+          8ae2158c2b7e8af7bc6943b4d9944c81dbb5947e cecs_v2_2_intraday.py
+          a3cefa68bde75e44eb2242743d79c03cbd10a9a3 cecs_v2_1_runner.py
+          BLOBS
+          while read -r expected file; do
+            actual="$(git hash-object "$file")"
+            if [ "$actual" != "$expected" ]; then
+              echo "::error::Frozen dependency changed: $file"
               exit 1
-            }
-          done
-          echo "All CECS3 strategy dependencies exactly match launch commit $frozen."
+            fi
+          done < /tmp/cecs3-frozen-blobs.txt
+          echo "All CECS3 strategy dependencies match their frozen blobs."
       - name: CECS3 strategy and paper accounting regression tests
         run: python -m unittest -v test_cecs3.py test_cecs3_forward.py
       - name: UTC daily Bitstamp published-signal and sampled-quote virtual decision
