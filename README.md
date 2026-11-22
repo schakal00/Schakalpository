@@ -13,7 +13,9 @@
 
 **Echte historische Zahlen der Minutenpreis-Simulation 2022–08.09.2026:** **+13,95 %** Rendite nach 15 bps Gebühren/Slippage und zusätzlich 2 bps Halbspread pro Orderseite bei **−9,39 %** maximalem Tages-Drawdown. **2025 aber −6,54 %.** Die Zahlen stammen aus bereits bekannten historischen Kursverläufen und sind **kein zukünftiger Gewinnnachweis**.
 
-**Paper-Stand am 22.11.2026:** 100.000 USD virtuelles Startkapital, 0 BTC, keine simulierte Transaktion. GitHub Actions soll gegen 09:35 UTC täglich prüfen; tatsächliche Startzeit kann variieren. Der Paper-Simulator verwendet *frisch beobachtetes Bitstamp Bid/Ask*, nicht einen bereits vergangenen Kurs. Strategieregeln und alle sechs signalrelevanten Quellen sind gegen unbemerkte Änderungen geschützt.
+**Zusätzliche Datenprüfung:** [Cross-Source-Audit: 2.808 BTC/USD-Tages-Schlusskurse aus unabhängigen Tages-/Minutenarchiven stimmen exakt überein](https://github.com/schakal00/Schakalpository/actions/runs/45031312052). Das bestätigt die historischen Tages-Schlusskurse, nicht die künftige Rentabilität oder echte Orderfills.
+
+**Paper-Stand am 22.11.2026:** 100.000 USD virtuelles Startkapital, 0 BTC, keine simulierte Transaktion. GitHub Actions soll gegen 09:35 UTC täglich prüfen; tatsächliche Startzeit kann variieren. Der Paper-Simulator verwendet *frisch beobachtetes Bitstamp Bid/Ask*, nicht einen bereits vergangenen Kurs. Strategieregeln und alle acht Strategie-, Buchhaltungs- und Kursquellen sind gegen unbemerkte Änderungen geschützt.
 
 ## Aktuell: CECS 2.8 – Drei echte prospektive **virtuelle** Vergleichskonten
 
