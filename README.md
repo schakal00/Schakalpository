@@ -1,5 +1,13 @@
 # CECS – BTC/USD Research
 
+## Aktuell: CECS 2.3 · Trendfilter statt ständigem 15m-Trading
+
+- **[Ergebnisse inklusive Kostenstress auf Deutsch](CECS_2_3_TREND_AUDIT_DE.md)**
+- **[Erfolgreicher GitHub-Actions-Backtest](https://github.com/schakal00/Schakalpository/actions/runs/45009423057)**
+- [Trend-/Zyklus-/Elliott-/Vector-Forschungsrunner](cecs_v2_3_trend.py) · [Regressionstests](test_trend.py)
+
+**Vorläufiger Befund:** `TrendCycleWide6`, mit 0,5 % modelliertem Anfangsrisiko je Trade, erzielte im bereits untersuchten BTC/USD-Zeitraum 2022–21.11.2026 **+1,21 %** nach 15 bps pro Orderleg bei **−1,32 %** größtem mark-to-market Drawdown. Auch bei 30 bps pro Leg noch +1,08 %. **Nicht auf unabhängigen künftigen Daten validiert**, nur 15 Trades und 2025/2026 negativ. Kein Live-Handel, keine Renditezusage.
+
 ## Neu: CECS 2.2 · Bitstamp-Intraday-Test (2024–2026)
 
 - **[CECS 2.2 – vollständige 15m/1h-Ergebnisse inkl. Kostenstress auf Deutsch](CECS_2_2_INTRADAY_DE.md)**
