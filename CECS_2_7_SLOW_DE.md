@@ -73,3 +73,15 @@ Das bestehende `TrendCycleWide6Delayed`-Paper-Modell bleibt unverändert und als
 - Artefaktinhalt: `summary.csv`, `periods.csv`, `orders.csv`, `daily_equity.csv`, `cost_sensitivity.csv`, `manifest.json`.
 
 **Warnung:** Alle oben berichteten Jahre wurden bereits bei der Strategieentwicklung betrachtet. Der Entwicklungs- und der historische Reviewteil sind kein wirklicher Out-of-sample- oder Walk-forward-Leistungsnachweis. Finanzresearch ohne Zukunftsgarantie.
+
+
+## Explorative Unsicherheit: Bringt der Vector-Faktor zusätzlichen Ertrag?
+
+Aus den **täglich synchronisierten, nach Kosten modellierten Equity-Reihen** für den bereits untersuchten Zeitraum 2022–21.11.2026 wurde der logarithmische Renditeunterschied zwischen `TrendVol30Vector` und `TrendVol30` berechnet.
+
+- Beobachtet: ca. **+1,12 Prozentpunkte annualisierte logarithmische Überrendite** in dieser historischen Stichprobe.
+- Grobe *Kalendermonatsblock-Bootstrap*-Prüfung mit 4.000 Replikaten und festem Pseudozufalls-Seed: ca. **−1,66 bis +3,80 Prozentpunkte** für ein nominales 95-%-Intervall.
+- Das Intervall schließt **null** ein. Zudem wurden die Strategien bereits anhand derselben historischen Daten entworfen und verglichen; der Bootstrap korrigiert **nicht** für dieses nachträgliche Auswahlproblem. Kalendermonate sind außerdem nicht wirklich unabhängig. Das Intervall ist nur explorative Unsicherheitsinformation, **kein formal gültiger Signifikanznachweis**.
+- Gegen `Trend50` lag die annualisierte Log-Überrendite bei ca. **+1,26 Prozentpunkten**, gleichfalls mit sehr breitem Monatsblock-Bootstrap-Intervall von ungefähr **−3,66 bis +6,34**.
+
+**Entscheidung:** Den Vector-Tilt nicht als erfolgreiche Verbesserung vermarkten. Die Baseline bleibt die unveränderte Trend-/Exposure-Regel. Erst künftige datierte Beobachtungen können helfen, einen unabhängigen Nutzen zu prüfen.
