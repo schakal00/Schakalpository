@@ -7,6 +7,8 @@ on:
     paths:
       - 'cecs_v2_1_runner.py'
       - 'test_cecs_runner.py'
+      - 'cecs_v2_2_intraday.py'
+      - 'test_intraday.py'
       - '.github/workflows/cecs-btc.yml'
 
 permissions:
@@ -21,16 +23,19 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Unit tests
-        run: python -m unittest -v test_cecs_runner.py
-      - name: Fetch public Bitstamp daily OHLCV and run historical study
-        run: |
-          python cecs_v2_1_runner.py --out results
-      - name: Store reproducibility manifest and research results
+      - name: Regression tests
+        run: python -m unittest -v test_cecs_runner.py test_intraday.py
+      - name: Daily BTC/USD baseline
+        run: python cecs_v2_1_runner.py --out results
+      - name: Intraday BTC/USD 15m and 1h (Bitstamp 2024-2026)
+        run: python cecs_v2_2_intraday.py --years 2024 2025 2026 --out results_intraday
+      - name: Save research results and source hashes
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: cecs-btc-research-results
-          path: results/
+          path: |
+            results/
+            results_intraday/
           if-no-files-found: warn
           retention-days: 30
