@@ -1,0 +1,35 @@
+name: CECS 2.7 risk-aware slow BTC research
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'cecs_v2_7_slow.py'
+      - 'test_slow.py'
+      - '.github/workflows/cecs-slow.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  evaluate:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Audit causal volatility targeting allocation logic
+        run: python -m unittest -v test_slow.py
+      - name: Independent slow trend benchmark and cost stress
+        run: python cecs_v2_7_slow.py --out results_slow
+      - name: Save evidence and cost sensitivity
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cecs-2-7-slow-results
+          path: results_slow/
+          retention-days: 90
+          if-no-files-found: warn
