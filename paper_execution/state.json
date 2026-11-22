@@ -1,0 +1,21 @@
+{
+  "version": "CECS-2.5-FORWARD-PAPER-2026-11-22",
+  "model": "TrendCycleWide6Delayed",
+  "started_utc_date": "2026-11-22",
+  "initial_cash_usd": 100000.0,
+  "cash_usd": 100000.0,
+  "qty_btc": 0.0,
+  "entry_usd": null,
+  "entry_at": null,
+  "entry_cost_usd": null,
+  "stop_usd": null,
+  "highest_completed_daily_high": null,
+  "last_trailing_source_day": null,
+  "pending": null,
+  "last_exit_date": null,
+  "processed_dates": [
+    "2026-11-22"
+  ],
+  "realized_pnl_usd": 0.0,
+  "closed_trades": 0
+}
