@@ -2,7 +2,7 @@
 
 **Status:** Historisch **nicht profitabel**, nicht für Paper-Trading oder Echtgeld freigegeben.
 
-**GitHub Actions:** [Erfolgreicher Lauf #45027402149](https://github.com/schakal00/Schakalpository/actions/runs/45027402149); 8 synthetische Kausalitäts-/Ausführungstests bestanden. Archiv `cecs-2-6-wm-research` enthält `summary.csv`, `chronological_periods.csv`, `cost_sensitivity.csv`, `trade_log.csv`, `manifest.json`.
+**GitHub Actions:** [Erfolgreicher Lauf #45028238061](https://github.com/schakal00/Schakalpository/actions/runs/45028238061); 10 synthetische Kausalitäts-/Ausführungstests bestanden. Archiv `cecs-2-6-wm-research` enthält `summary.csv`, `chronological_periods.csv`, `cost_sensitivity.csv`, `trade_log.csv`, `manifest.json`.
 
 ## Datenquelle und Zeitabdeckung
 
@@ -13,6 +13,9 @@
 - 15 Basispunkte modellierte Gebühr/Slippage **je Ausführung** im Haupttest, auch die Kostenstufen 0, 5 und 30 bps pro Leg wurden exportiert.
 - 0,5 % geplantes Anfangsrisiko je Position, maximal volle Spot-Kapitaldeckung ohne Hebel, Stop nach 5 × 15m-ATR, Gewinnziel netto 2,5R, maximal 288 15m-Kerzen Haltedauer.
 - Bei Mehrdeutigkeit innerhalb einer Kerze wird zuerst der Stop ausgelöst; Stops bei Preislücken werden zum Öffnungskurs ausgeführt.
+
+
+**Audit-Korrektur:** Der erste veröffentlichte Lauf wurde durch einen Ausführungs-Audit ersetzt: Gewinnziele werden nun auch **innerhalb der Einstiegskerze** berücksichtigt, wobei ein zugleich berührter Stop Vorrang hat; außerdem ist eine neue Position unmittelbar nach einem Exit in derselben Kerze ausgeschlossen. Der zehnteilige Testsatz und die komplette Achtjahresanalyse wurden danach erneut erfolgreich ausgeführt. Die Werte oben entsprechen **nur dem korrigierten Lauf #45028238061**.
 
 ## Exakte mechanische Regeln
 
@@ -30,14 +33,14 @@ Der Ansatz ist nur **Traders-Reality-inspiriert**, nicht Tinos vollständiges Hy
 
 | Modell | Trades | Rendite | Max. mark-to-market Drawdown | Profit Factor | Durchschnittliches R |
 |---|---:|---:|---:|---:|---:|
-| WOnly | 1.408 | **−57,38 %** | −60,07 % | 0,821 | −0,117 |
-| WVector | 1.397 | **−58,39 %** | −61,15 % | 0,815 | −0,121 |
-| W1h | 809 | **−30,34 %** | −35,46 % | 0,867 | −0,085 |
-| WDaily | 658 | **−38,81 %** | −43,49 % | 0,785 | −0,145 |
-| WCycle | 449 | **−29,32 %** | −35,24 % | 0,768 | −0,151 |
-| WFusion | 315 | **−16,79 %** | −25,93 % | 0,828 | −0,112 |
-| WFusionMExit | 491 | **−36,34 %** | −39,76 % | 0,624 | −0,182 |
-| W1hMExit | 1.287 | **−67,65 %** | −68,51 % | 0,653 | −0,173 |
+| WOnly | 1.397 | **−57,56 %** | −60,28 % | 0,821 | −0,118 |
+| WVector | 1.386 | **−58,56 %** | −61,35 % | 0,815 | −0,123 |
+| W1h | 803 | **−30,93 %** | −36,94 % | 0,864 | −0,087 |
+| WDaily | 656 | **−40,31 %** | −45,16 % | 0,776 | −0,153 |
+| WCycle | 448 | **−31,40 %** | −37,15 % | 0,752 | −0,164 |
+| WFusion | 314 | **−17,82 %** | −27,21 % | 0,818 | −0,121 |
+| WFusionMExit | 490 | **−36,02 %** | −39,46 % | 0,628 | −0,180 |
+| W1hMExit | 1.279 | **−67,63 %** | −68,54 % | 0,654 | −0,174 |
 
 Hier bedeutet die niedrige Anzahl von WFusion-Trades primär eine geringere Kapitalexposition; die Treffer-/R-Qualität wurde **nicht** signifikant besser. `WVector` hat die W-only-Ergebnisse nicht verbessert. Der M-Ausstieg erhöhte die Transaktionshäufigkeit und verschlechterte den gesamten Ertrag deutlich.
 
@@ -45,11 +48,11 @@ Hier bedeutet die niedrige Anzahl von WFusion-Trades primär eine geringere Kapi
 
 | Modell | Entwicklung 2019–2021 | Historischer Vergleich 2022–2023 | Bereits eingesehene Prüfung 2024–2026 (bis 09.09.) |
 |---|---:|---:|---:|
-| WOnly | −24,44 % | −29,17 % | −20,38 % |
-| WVector | −24,55 % | −30,23 % | −20,96 % |
-| W1h | −15,17 % | −13,77 % | −4,78 % |
-| WFusion | −4,72 % | −12,01 % | −0,75 % |
-| WFusionMExit | −11,65 % | −17,91 % | −12,23 % |
+| WOnly | −22,82 % | −29,34 % | −22,18 % |
+| WVector | −22,93 % | −30,40 % | −22,74 % |
+| W1h | −13,45 % | −14,83 % | −6,30 % |
+| WFusion | −4,24 % | −12,01 % | −2,47 % |
+| WFusionMExit | −11,21 % | −17,91 % | −12,23 % |
 
 **Die Trennung ist chronologisch, aber keine echte unberührte Holdout-Validierung**, weil das Projekt dieselben BTC-Jahre zuvor bereits analysiert hat. Sie bestätigt hier aber ein breites negatives Muster.
 
