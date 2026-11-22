@@ -49,6 +49,7 @@ def snapshot(data, today, source_sha, code_sha):
         "model":MODEL,
         "assumed_cost_bps_each_leg":FEE_SLIPPAGE_BPS_EACH_LEG,
         "source_close":round(feature["close"],4),
+        "source_high":round(feature["high"],4),
         "atr14":round(feature["atr"],4) if feature["atr"] is not None else None,
         "sma50":round(feature["sma50"],4) if feature["sma50"] is not None else None,
         "sma200":round(feature["sma200"],4) if feature["sma200"] is not None else None,
@@ -74,6 +75,10 @@ def main():
     p.add_argument("--allow-stale",action="store_true",help="Only for LOCAL debugging; does not bypass snapshot guard")
     args=p.parse_args()
     today=dt.date.fromisoformat(args.date) if args.date else dt.datetime.now(dt.timezone.utc).date()
+    target=Path(args.out)/(today.isoformat()+".json")
+    if target.exists():
+        print(json.dumps({"status":"already_recorded","path":str(target)}))
+        return
     payload=fetch_data(args.csv)
     data=parse_data(payload)
     code_sha=hashlib.sha256(Path(__file__).with_name("cecs_v2_3_trend.py").read_bytes()).hexdigest()
@@ -82,7 +87,7 @@ def main():
     output.mkdir(parents=True,exist_ok=True)
     target=output/(today.isoformat()+".json")
     if target.exists():
-        raise FileExistsError("Preserve first immutable observation; refusing to overwrite "+str(target))
+        raise FileExistsError("Concurrent duplicate observation: "+str(target))
     target.write_text(json.dumps(item,indent=2,ensure_ascii=False)+"\n",encoding="utf-8")
     print(json.dumps({"saved":str(target),"observation":item},ensure_ascii=False,indent=2))
 
