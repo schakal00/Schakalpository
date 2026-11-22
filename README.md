@@ -1,5 +1,21 @@
 # CECS – BTC/USD Research
 
+## Aktuell: CECS 2.8 – Drei echte prospektive **virtuelle** Vergleichskonten
+
+- **[Erster erfolgreicher Forward-Vergleich und Forschungsregeln (Deutsch)](CECS_2_8_FORWARD_VERGLEICH_DE.md)**
+- **[Die laufenden, unveränderlich datierten Schattenkonten](slow_shadow/observations/)**
+- **[Erfolgreicher Cloud-Lauf #45028041087](https://github.com/schakal00/Schakalpository/actions/runs/45028041087)**
+
+Die drei Modelle (`BuyHold25`, `Trend25`, `TrendVol30Vector`) starteten am 22.11.2026 unabhängig mit je **100.000 USD virtuellem Kapital** und **0 BTC**. GitHub soll täglich nach ca. **09:15 UTC** neue Daten mit nachweislich frischen Bitstamp-Geld-/Briefkursen verarbeiten. **Keine realen Orders, keine Brokeranbindung, keine garantierten Ausführungen oder Gewinne.**
+
+## Ergebnisse der letzten großen Auditläufe
+
+- **[CECS 2.7: Langsame Trendstrategie – historische Nettorendite 2022–2026, Drawdown und Kosten](CECS_2_7_SLOW_DE.md)**: `Trend25` **+16,59 %** bei **−13,06 %** maximalem täglichem Drawdown, `TrendVol30Vector` **+41,09 %** bei **−31,04 %** Drawdown. **Keine echte zukünftige Validierung.** Der Zusatznutzen des Vector-Faktors ist statistisch noch unbewiesen.
+- **[CECS 2.6: Traders-Reality-inspirierte W-/M-15m-Strategien – nach Korrektur erneut getestet und verworfen](CECS_2_6_MW_NEGATIV_DE.md)**: alle acht Varianten 2019–September 2026 historisch negativ; **nicht** im aktiven Paper-System.
+- **[CECS 2.5: Weiterhin separat eingefrorenes ursprüngliches Zyklus-Paper-Journal](CECS_2_5_PAPER_DE.md)**.
+
+**Der entscheidende Unterschied:** Diese Renditezahlen entstammen einer bekannten historischen Stichprobe. Das neue 2.8-Journal sammelt hingegen ausschließlich **ab Einrichtung** entstandene virtuelle Preisbeobachtungen. Profitabilität ist **nicht nachgewiesen**, und selbst ein positiver Forward-Test wäre kein Gewinnversprechen.
+
 ## Neu: CECS 2.5 – echtes prospektives Paper-Journal (ohne Echtgeld)
 
 - **[Aktuellen Paper-Kontostand und sämtliche Einschränkungen lesen](CECS_2_5_PAPER_DE.md)**
