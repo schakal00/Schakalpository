@@ -1,14 +1,23 @@
-# CECS – Bitcoin Research
+# CECS – BTC/USD Research
 
-Forschungsprojekt: Kombination aus Camel-inspirierten Marktzyklen (DCL/WCL), einem expliziten Elliott-Welle-2-Proxy und Traders-Reality-inspirierten Vector Candles (Volumen-/Climax-Kerzen).
+## Status: GitHub Actions erfolgreich
 
-**Wichtiger Hinweis:** Die Komponenten sind unabhängig definierte Proxys, keine offizielle Umsetzung der proprietären Lehrmethoden. Weder Gewinne noch ein Trading-Vorteil sind nachgewiesen. Keine Orders, keine API-Keys.
+- **[Deutsche Ergebnisse 2017–2026](ERGEBNISSE_DE.md)**
+- **[Erster erfolgreicher automatischer Lauf](https://github.com/schakal00/Schakalpository/actions/runs/45006342841)**
+- **[Programmcode](cecs_v2_1_runner.py)** und **[7 Regressionstests](test_cecs_runner.py)**
 
-## Datenquelle
-Öffentliche tägliche Bitstamp-BTC/USD-OHLCV-Kerzen:
-https://raw.githubusercontent.com/daniegitx1/btc-price-history/main/data/btc_usd_daily.csv
+CECS kombiniert mechanische Näherungen der DCL/WCL-Zyklusanalyse, einen Elliott-Welle-2-Proxy und Traders-Reality-inspirierte Vector Candles auf öffentlichen BTC/USD-Tagesdaten.
 
-## Automatisierte Prüfung
-GitHub Actions führt Tests und einen historischen Auswertungsprozess aus. Alle Ergebnisse sind Forschungsdaten, keine Live-Signale. Zeitlich spätere Kerzen dürfen nicht für frühere Entscheidungen verwendet werden.
+Der Repo-Runner ist eine eigenständige, bewusst kompakte Version des früheren CECS-2.1-Forschungsprojekts. Er ist **nicht** die vollständige originale Camel-Finance- oder Traders-Reality-Methode.
 
-**Stand:** CECS 2.1, 22. November 2026.
+### Reproduzieren
+
+GitHub → Actions → **CECS BTC research audit** → Run workflow.
+
+Der Workflow prüft die Strategie-Implementierung, lädt den aktuellen öffentlichen Bitstamp-Tagesdatensatz herunter und erstellt ein ZIP mit Trades, Statistiken, Vector-Recovery und Quellen-Hash. Keine API-Schlüssel erforderlich, keine echten Orders.
+
+### Befund (historische Nachrechnung 2022–2026)
+
+Die kombinierten harten CECS-Filter ergaben **0 Trades**. Der separate Vector-Filter lieferte 11 Trades mit +3,35 % Modellrendite bei den hinterlegten Gebühren-/Slippageannahmen. Die Stichprobe ist zu klein für einen Nachweis dauerhafter Profitabilität. [Details und Grenzen](ERGEBNISSE_DE.md).
+
+**Kein Investmentrat und kein Live-Handelssystem.**
