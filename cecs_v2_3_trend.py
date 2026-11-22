@@ -92,7 +92,7 @@ def entry_gate(b,model):
         return True
     if not b["trend"]:
         return False
-    if model in ("TrendSpot","TrendSpotQuarter","TrendRisk","TrendWide6","TrendWide10","TrendCycleWide6Delayed"):
+    if model in ("TrendSpot","TrendSpotQuarter","TrendRisk","TrendWide6","TrendWide10"):
         return True
     if model in ("TrendVector","TrendVectorWide6"):
         return b["vector_confirmed"]
