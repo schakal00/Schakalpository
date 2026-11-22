@@ -191,6 +191,7 @@ def simulate(bars,signals,m_exits,model,cost=COST):
     peak=100000.
     mexit=model.endswith("MExit")
     for i,x in enumerate(bars):
+        exited_this_bar=False
         if p is not None:
             why=px=None
             if i in m_exits and mexit:
@@ -229,7 +230,8 @@ def simulate(bars,signals,m_exits,model,cost=COST):
                     vector=p["signal"]["vector"]))
                 qty=0
                 p=None
-        if qty==0 and p is None and i in entry_indices and i>0 and i<len(bars)-1:
+                exited_this_bar=True
+        if not exited_this_bar and qty==0 and p is None and i in entry_indices and i>0 and i<len(bars)-1:
             if bars[i]["time"]==bars[i-1]["time"]+dt.timedelta(minutes=15):
                 signal=entry_indices[i]
                 atr=bars[i-1]["atr"]
@@ -247,17 +249,22 @@ def simulate(bars,signals,m_exits,model,cost=COST):
                             p=dict(open_idx=i,price=open_px,stop=stop,target=target,
                                 spent=spent,fee_entry=qty*open_px*cost,
                                 risk_one=risk_one,signal=signal)
-                            # Check entry-day 15m bar, stop BEFORE target.
-                            if x["low"]<=stop:
-                                proceeds=qty*stop*(1-cost)
+                            # Entry bar is a valid intraday trade interval. Both
+                            # levels touched => choose the stop first (pessimistic).
+                            hit_stop=x["low"]<=stop
+                            hit_target=x["high"]>=target
+                            if hit_stop or hit_target:
+                                fill=stop if hit_stop else target
+                                reason="entry_bar_stop" if hit_stop else "entry_bar_target"
+                                proceeds=qty*fill*(1-cost)
                                 pnl=proceeds-p["spent"]
                                 cash+=proceeds
                                 trades.append(dict(model=model,entry=str(x["time"]),
-                                    exit=str(x["time"]),reason="entry_bar_stop",
+                                    exit=str(x["time"]),reason=reason,
                                     pnl_usd=round(pnl,4),r=round(pnl/(qty*risk_one),5),
                                     initial_cost_usd=round(p["fee_entry"],4),
-                                    closing_cost_usd=round(qty*stop*cost,4),
-                                    entry_usd=open_px,exit_usd=stop,
+                                    closing_cost_usd=round(qty*fill*cost,4),
+                                    entry_usd=open_px,exit_usd=fill,
                                     daily_cycle=signal["daily_cycle"],
                                     daily_elliott=signal["daily_elliott"],
                                     vector=signal["vector"]))
