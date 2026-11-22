@@ -9,6 +9,8 @@ on:
       - 'test_cecs_runner.py'
       - 'cecs_v2_2_intraday.py'
       - 'test_intraday.py'
+      - 'cecs_v2_3_trend.py'
+      - 'test_trend.py'
       - '.github/workflows/cecs-btc.yml'
 
 permissions:
@@ -24,11 +26,13 @@ jobs:
         with:
           python-version: '3.11'
       - name: Regression tests
-        run: python -m unittest -v test_cecs_runner.py test_intraday.py
+        run: python -m unittest -v test_cecs_runner.py test_intraday.py test_trend.py
       - name: Daily BTC/USD baseline
         run: python cecs_v2_1_runner.py --out results
       - name: Intraday BTC/USD 15m and 1h (Bitstamp 2024-2026)
         run: python cecs_v2_2_intraday.py --years 2024 2025 2026 --out results_intraday
+      - name: CECS 2.3 slow trend regime and ablation audit
+        run: python cecs_v2_3_trend.py --out results_trend
       - name: Save research results and source hashes
         if: always()
         uses: actions/upload-artifact@v4
@@ -37,5 +41,6 @@ jobs:
           path: |
             results/
             results_intraday/
+            results_trend/
           if-no-files-found: warn
           retention-days: 30
