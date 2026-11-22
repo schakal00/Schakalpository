@@ -7,6 +7,8 @@ on:
     paths:
       - 'cecs_v2_7_slow.py'
       - 'test_slow.py'
+      - 'cecs_uncertainty.py'
+      - 'test_uncertainty.py'
       - '.github/workflows/cecs-slow.yml'
 
 permissions:
@@ -22,9 +24,11 @@ jobs:
         with:
           python-version: '3.11'
       - name: Audit causal volatility targeting allocation logic
-        run: python -m unittest -v test_slow.py
+        run: python -m unittest -v test_slow.py test_uncertainty.py
       - name: Independent slow trend benchmark and cost stress
         run: python cecs_v2_7_slow.py --out results_slow
+      - name: Descriptive 2022-2026 monthly-block uncertainty (not a p-value)
+        run: python cecs_uncertainty.py --input results_slow/daily_equity.csv --out results_slow/exploratory_bootstrap.csv
       - name: Save evidence and cost sensitivity
         if: always()
         uses: actions/upload-artifact@v4
