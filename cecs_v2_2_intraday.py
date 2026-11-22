@@ -335,7 +335,7 @@ def main():
                   fee_slippage_per_leg=COST,
                   years=[],notes=["Full 15m bar closed before signal","Next 15m open entry",
                                    "Incomplete/missing minute bars discarded","Only historical, no forward performance claim"])
-    summaries,trades,diagnostics=[],[],[]
+    summaries,trades,diagnostics,sensitivity=[],[],[],[]
     for year in a.years:
         if a.local_dir:
             p=Path(a.local_dir)/("BTCUSD_bitstamp_1min_%s.csv.gz"%year)
@@ -353,7 +353,12 @@ def main():
             summary,records=simulate(bars,candidates,model,year)
             summaries.append(summary)
             trades.extend(records)
+            sensitivity.append({"cost_bps_each_leg": 15, **summary})
+            for basis_points in (0, 5):
+                scenario,_=simulate(bars,candidates,model,year,cost=basis_points/10000)
+                sensitivity.append({"cost_bps_each_leg": basis_points, **scenario})
     write_csv(out/"intraday_summary.csv",summaries)
+    write_csv(out/"intraday_sensitivity.csv",sensitivity)
     write_csv(out/"intraday_trades.csv",trades)
     write_csv(out/"intraday_coverage.csv",diagnostics)
     (out/"intraday_manifest.json").write_text(json.dumps(manifest,indent=2),encoding="utf-8")
