@@ -1,0 +1,54 @@
+name: CECS 2.4 forward observation journal
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 9 * * *'
+  push:
+    branches: [main]
+    paths:
+      - 'daily_watch.py'
+      - 'test_daily_watch.py'
+      - '.github/workflows/cecs-paper-watch.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cecs-observation-journal
+  cancel-in-progress: false
+
+jobs:
+  observe:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Causality and journal tests
+        run: python -m unittest -v test_daily_watch.py test_trend.py
+      - name: Create dated, prospectively timestamped observation (NO ORDERS)
+        run: python daily_watch.py --out paper_watch
+      - name: Append-only commit of observation (never edit earlier dates)
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add paper_watch/
+          if git diff --cached --quiet; then
+            echo 'No new observation to commit.'
+          else
+            git commit -m "paper-watch: UTC close observation $(date -u +%F)"
+            git push
+          fi
+      - name: Save dated backup artifact
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cecs-forward-observation-
+          path: paper_watch/
+          retention-days: 90
+          if-no-files-found: warn
