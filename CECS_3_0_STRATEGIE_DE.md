@@ -74,6 +74,21 @@ Die positive Gesamtrendite beruht besonders auf **2023 und 2024**; 2025 war nega
 
 Eine schmal positive Rendite bleibt selbst bei höheren Kosten erhalten. Aber das ist nur eine **historische Sensitivitätsanalyse**, keine bestätigte realisierbare Ausführung.
 
+## Unabhängiger Datenabgleich: bestanden
+
+**Zusätzlicher erfolgreicher [Bitstamp-Datenkonsistenz-Audit #45031312052](https://github.com/schakal00/Schakalpository/actions/runs/45031312052)** mit 4 zusätzlichen Regressionstests. Es wurden zwei getrennte öffentliche Datensätze verglichen: die aktuelle Bitstamp-BTC/USD-Tages-CSV und die aus 1-Minuten-Bitstamp-BTC/USD-Kursen erzeugten täglichen OHLC-Werte.
+
+| Preisfeld | Überlappende UTC-Tage | Median der absoluten Abweichung | Größte Abweichung |
+| --- | ---: | ---: | ---: |
+| **Schlusskurs** | **2.808** | **0,000 %** | **0,000 %** |
+| Tageseröffnung | 2.808 | 0,000 % | 0,231 % |
+| Tageshoch | 2.808 | 0,000 % | 0,082 % |
+| Tagestief | 2.808 | 0,000 % | 0,024 % |
+
+**Die Schlusskurse stimmen auf allen 2.808 Tagen exakt überein.** Das stärkt die Datengrundlage, ersetzt aber keine Prüfung realer Orderausführungen, Gebühren oder künftig unbekannter Kurse. Die 09:00-Preise stammen aus den 1-Minuten-Archiven, nicht aus dem Tages-Open. Der Audit enthält Einzelbeispiele der größten Preisabweichungen.
+
+[Audit-Code](cecs3_data_audit.py) · [Tests](test_cecs3_data_audit.py). CSV-Resultate und Quell-Hashes im Artifact `cecs3-bitstamp-data-integrity`.
+
 ## Neues eigenständiges prospektives Paper-Konto
 
 Am 22.11.2026 erfolgreich initialisiert (separat von CECS2.5 und den drei CECS2.8-Modellen).
@@ -85,7 +100,7 @@ Am 22.11.2026 erfolgreich initialisiert (separat von CECS2.5 und den drei CECS2.
 - Langfristiger Aufwärtstrend nicht erfüllt → **0 % BTC-Ziel**, **0 BTC**, **0 virtuelle Transaktionen**, Kapitalkonto **100.000 USD**.
 - GitHub Actions beobachtet künftig täglich gegen **09:35 UTC**. GitHub ist kein garantierter Echtzeitdienst; ein ausgefallener Lauf kann eine geplante Rebalancierung verzögern.
 - Kauf nur an einem erlaubten Rebalancing-Tag zum **frisch beobachteten Ask**, Verkauf zum **frisch beobachteten Bid**, jeweils **15 bps zusätzliche Kosten**. Keine echten Börsen-Fills, keine Orders.
-- Jede datierte Beobachtung wird gespeichert. Doppelte Verarbeitung wird unterbunden. Ein Versions- oder Strategiequellenwechsel führt zum Abbruch, statt ein Experiment still zu ändern.
+- Jede datierte Beobachtung wird gespeichert. Doppelte Verarbeitung wird unterbunden. Ein Versions- oder Quellwechsel in der Strategie-, Buchhaltungs- oder Kursauswertungslogik führt zum Abbruch, statt ein Experiment still zu ändern.
 - Tagesinterne Preisschwankungen oder Stop-Berührungen können **nicht** vollständig erkannt werden.
 
 **Einsatzentscheidung:** Stand 22.11.2026 **nur Paper-Trading**. Für eine Echtgeldeinführung fehlen echte, neu entstehende Performance-Daten über unterschiedliche Regime, verifizierte Ausführungspreise und ein harter Risikorahmen nach realen Portfolioverlusten.
