@@ -1,6 +1,6 @@
 # CECS 2.7 – Trend-/Volatilitätssteuerung: ergebnisoffener Audit
 
-**Stand:** 22.11.2026. [Erfolgreicher automatisierter GitHub-Backtest #45027720738](https://github.com/schakal00/Schakalpository/actions/runs/45027720738), 7 Unit-Tests bestanden.
+**Stand:** 22.11.2026. [Erfolgreicher automatisierter GitHub-Backtest #45028497287](https://github.com/schakal00/Schakalpository/actions/runs/45028497287), 10 Unit-Tests bestanden.
 
 ## Warum wir diese Richtung testen
 
@@ -69,7 +69,7 @@ Das bestehende `TrendCycleWide6Delayed`-Paper-Modell bleibt unverändert und als
 ### Reproduzierbarkeit
 
 - [Runner](cecs_v2_7_slow.py) und [Unit-Tests](test_slow.py).
-- [Actions Run #45027720738](https://github.com/schakal00/Schakalpository/actions/runs/45027720738) → Artifact `cecs-2-7-slow-results`.
+- [Actions Run #45028497287](https://github.com/schakal00/Schakalpository/actions/runs/45028497287) → Artifact `cecs-2-7-slow-results`.
 - Artefaktinhalt: `summary.csv`, `periods.csv`, `orders.csv`, `daily_equity.csv`, `cost_sensitivity.csv`, `manifest.json`.
 
 **Warnung:** Alle oben berichteten Jahre wurden bereits bei der Strategieentwicklung betrachtet. Der Entwicklungs- und der historische Reviewteil sind kein wirklicher Out-of-sample- oder Walk-forward-Leistungsnachweis. Finanzresearch ohne Zukunftsgarantie.
@@ -85,3 +85,5 @@ Aus den **täglich synchronisierten, nach Kosten modellierten Equity-Reihen** f�
 - Gegen `Trend50` lag die annualisierte Log-Überrendite bei ca. **+1,26 Prozentpunkten**, gleichfalls mit sehr breitem Monatsblock-Bootstrap-Intervall von ungefähr **−3,66 bis +6,34**.
 
 **Entscheidung:** Den Vector-Tilt nicht als erfolgreiche Verbesserung vermarkten. Die Baseline bleibt die unveränderte Trend-/Exposure-Regel. Erst künftige datierte Beobachtungen können helfen, einen unabhängigen Nutzen zu prüfen.
+
+**Reproduzierbarer Nachtest:** Der erfolgreiche [Cloud-Lauf #45028497287](https://github.com/schakal00/Schakalpository/actions/runs/45028497287) enthält die Datei `exploratory_bootstrap.csv` mit den oben genannten Monatsblock-Stichprobenintervallen sowie die vollständigen Equity-Kurven und Quellen-Hashes. Implementierung: [cecs_uncertainty.py](cecs_uncertainty.py), Tests: [test_uncertainty.py](test_uncertainty.py). Die resultierenden Intervalle werden ausdrücklich **nicht** als formale Signifikanztests oder als Auswahlbias-Korrektur interpretiert.
