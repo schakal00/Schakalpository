@@ -1,5 +1,13 @@
 # CECS – BTC/USD Research
 
+## Neu: CECS 2.4 – tägliche Vorwärtsbeobachtung ab 22.11.2026
+
+- **[Warum wir die Strategie jetzt einfrieren, statt die Vergangenheit zu optimieren](CECS_2_4_FORWARD_DE.md)**
+- **[Erste echte, datierte Beobachtung](paper_watch/2026-11-22.json)**
+- **[Erster erfolgreicher Beobachtungslauf](https://github.com/schakal00/Schakalpository/actions/runs/45011721258)**
+
+Automatisch wird um circa **09:00 UTC** ein BTC/USD-Datenstand in GitHub protokolliert. **Nur Beobachtung: keine Orders, keine tatsächlichen Paper-Trades, keine Gewinnzusage.** Die der Datenverfügbarkeit angepasste `TrendCycleWide6Delayed`-Variante erzielte im bereits eingesehenen historischen Prüfzeitraum **+0,47 %** nach angenommenen Kosten (keine unabhängige Validierung). Der erste protokollierte Marktstatus erfüllt aktuell **nicht** die Long-Trendbedingung.
+
 ## Aktuell: CECS 2.3 · Trendfilter statt ständigem 15m-Trading
 
 - **[Ergebnisse inklusive Kostenstress auf Deutsch](CECS_2_3_TREND_AUDIT_DE.md)**
