@@ -107,11 +107,11 @@ def entry_gate(b,model):
     raise ValueError(model)
 
 
-def gross_equity(cash,quantity,mark):
-    return cash+quantity*mark*(1-COST)
+def gross_equity(cash,quantity,mark,cost=COST):
+    return cash+quantity*mark*(1-cost)
 
 
-def backtest(bars,model):
+def backtest(bars,model,cost=COST):
     cash=100000.
     qty=0.
     stop=None
@@ -130,8 +130,8 @@ def backtest(bars,model):
     drawdown=0.
     def close_trade(i,price,reason):
         nonlocal cash,qty,stop,highest,entry,entry_idx,last_exit,entry_qty,entry_cost,entry_risk,entry_score
-        cash+=qty*price*(1-COST)
-        pnl=qty*(price*(1-COST)-entry*(1+COST))
+        cash+=qty*price*(1-cost)
+        pnl=qty*(price*(1-cost)-entry*(1+cost))
         trades.append(dict(model=model,entry=str(bars[entry_idx]["date"]),exit=str(bars[i]["date"]),
                            entry_px=round(entry,2),exit_px=round(price,2),reason=reason,
                            pnl_usd=round(pnl,2),r=round(pnl/(entry_qty*entry_risk),5) if entry_risk else None,
@@ -155,32 +155,32 @@ def backtest(bars,model):
         if i>=START and qty==0 and yesterday is not None and last_exit!=i and entry_gate(yesterday,model):
             if model=="BuyHoldSpot":
                 if not trades:    # after initial buy, never reenter
-                    allocation=cash/(x["open"]*(1+COST))
+                    allocation=cash/(x["open"]*(1+cost))
                 else:
                     allocation=0.
                 init_stop=None
                 unit_risk=None
             elif model in ("TrendSpot","TrendSpotQuarter"):
                 fraction=.25 if model=="TrendSpotQuarter" else 1.0
-                allocation=fraction*cash/(x["open"]*(1+COST))
+                allocation=fraction*cash/(x["open"]*(1+cost))
                 init_stop=None
                 unit_risk=None
             elif i-last_exit>COOLDOWN:
                 atr_factor=(10. if model=="TrendWide10" else 6. if model in ("TrendWide6","TrendVectorWide6","TrendCycleWide6") else STOP_ATR)
                 init_stop=yesterday["close"]-atr_factor*yesterday["atr"] if yesterday["atr"] else None
-                unit_risk=x["open"]*(1+COST)-init_stop*(1-COST) if init_stop else None
-                allocation=min(RISK*cash/unit_risk,cash/(x["open"]*(1+COST))) if unit_risk and unit_risk>0 and init_stop<x["open"] else 0.
+                unit_risk=x["open"]*(1+cost)-init_stop*(1-cost) if init_stop else None
+                allocation=min(RISK*cash/unit_risk,cash/(x["open"]*(1+cost))) if unit_risk and unit_risk>0 and init_stop<x["open"] else 0.
             else:
                 allocation=0.
                 init_stop=None
                 unit_risk=None
             if allocation>0:
                 qty=allocation
-                cash-=allocation*x["open"]*(1+COST)
+                cash-=allocation*x["open"]*(1+cost)
                 entry=x["open"]
                 entry_idx=i
                 entry_qty=allocation
-                entry_cost=COST
+                entry_cost=cost
                 entry_risk=unit_risk
                 entry_score=yesterday["score"]
                 stop=init_stop
@@ -197,7 +197,7 @@ def backtest(bars,model):
                 stop=max(stop,highest-atr_factor*x["atr"])
             if i==len(bars)-1:
                 close_trade(i,x["close"],"end_of_sample")
-        net=gross_equity(cash,qty,x["close"]) if qty>0 else cash
+        net=gross_equity(cash,qty,x["close"],cost) if qty>0 else cash
         peak=max(peak,net)
         drawdown=min(drawdown,net/peak-1.)
         equity.append(dict(model=model,date=str(x["date"]),equity=round(net,6),
@@ -262,13 +262,24 @@ def main():
     event_counts=indicators(bars)
     output=Path(args.out)
     output.mkdir(parents=True,exist_ok=True)
-    summaries,periods,trades,equity=[],[],[],[]
+    summaries,periods,trades,equity,sensitivity=[],[],[],[],[]
     for model in MODELS:
         s,e,t=backtest(bars,model)
         summaries.append(s)
         periods+=period_stats(e)
         trades+=t
         equity+=e
+        if model in ("TrendWide6","TrendWide10","TrendCycleWide6","TrendVectorWide6","TrendSpotQuarter"):
+            for bp in (0,5,15,30):
+                alt_stats,alt_eq,alt_trades=backtest(bars,model,cost=bp/10000)
+                review=next(x for x in period_stats(alt_eq) if x["period"]=="historical_review_2022_2026")
+                sensitivity.append(dict(model=model,fee_slippage_bps_per_leg=bp,
+                                        review_return_pct=review["return_pct"],
+                                        review_max_dd_pct=review["max_mtm_drawdown_pct"],
+                                        review_exposure_pct=review["exposure_pct"],
+                                        overall_trades=len(alt_trades),
+                                        historical_review_trades=sum(t["entry"]>="2022-01-01" for t in alt_trades)))
+    write_csv(output/"fee_sensitivity.csv",sensitivity)
     write_csv(output/"summary.csv",summaries)
     write_csv(output/"periods.csv",periods)
     write_csv(output/"trades.csv",trades)
