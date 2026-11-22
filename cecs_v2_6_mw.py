@@ -67,7 +67,7 @@ def pivot_motifs(bars):
     candidate_w=[]
     candidate_m=[]
     patterns=[]
-    for t in range(100,len(bars)-1):
+    for t in range(20,len(bars)-1):
         for kind,pidx,price in p[t]:
             if kind=="L":
                 prev=next((q for q in reversed(lows)
