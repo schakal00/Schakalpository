@@ -1,0 +1,14 @@
+{
+  "version": "CECS-3.0-DEFENSIVE-FORWARD-2026-11-22",
+  "strategy": "CECS3_Defensive",
+  "frozen_strategy_sha256": "fe2a51a8aa9ac49904ebc150a7e567f1ca80eea6236aa86d352dbdc98b9dafdd",
+  "started_utc_date": "2026-11-22",
+  "cash_usd": 100000.0,
+  "btc_quantity": 0.0,
+  "all_virtual_orders": 0,
+  "observed_peak_equity_usd": 100000.0,
+  "max_observed_drawdown_pct": 0.0,
+  "processed_dates": [
+    "2026-11-22"
+  ]
+}
