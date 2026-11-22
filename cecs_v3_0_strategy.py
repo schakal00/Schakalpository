@@ -27,7 +27,7 @@ from pathlib import Path
 from cecs_v2_1_runner import URL as DAILY_SOURCE
 from cecs_v2_2_intraday import download_year, aggregate_15m
 from cecs_v2_6_mw import full_daily
-from cecs_v2_7_slow import target_weight as existing_target
+from cecs_v2_7_slow import target_weight as existing_target, prepare
 
 UTC=dt.timezone.utc
 START_CASH=100000.
@@ -254,7 +254,7 @@ def main():
     args=p.parse_args()
     raw,sources=load(args.years)
     quotes=quote_points(raw)
-    daily=add_derived_features(full_daily(raw))
+    daily=add_derived_features(prepare(full_daily(raw)))
     folder=Path(args.out)
     folder.mkdir(exist_ok=True,parents=True)
     overall,periods,orders,curves,cost_test=[],[],[],[],[]
