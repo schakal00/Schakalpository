@@ -1,0 +1,54 @@
+name: CECS 2.8 frozen slow-strategy shadow portfolios
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '15 9 * * *'
+  push:
+    branches: [main]
+    paths:
+      - 'slow_shadow.py'
+      - 'test_slow_shadow.py'
+      - '.github/workflows/cecs-slow-shadow.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: cecs-forward-paper-journal
+  cancel-in-progress: false
+
+jobs:
+  shadow:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Causality, source freeze and accounting tests
+        run: python -m unittest -v test_slow.py test_slow_shadow.py
+      - name: Fresh Bitstamp bid ask and independent paper portfolios
+        run: python slow_shadow.py
+      - name: Append daily shadow report and commit new derived state
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add slow_shadow/
+          if git diff --cached --quiet; then
+            echo "No fresh forward entry"
+          else
+            git commit -m "shadow-paper: dated BTC comparison $(date -u +%F)"
+            git push
+          fi
+      - name: Backup prospective performance evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cecs-slow-shadow-journal
+          path: slow_shadow/
+          if-no-files-found: warn
+          retention-days: 90
