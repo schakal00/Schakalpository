@@ -237,9 +237,9 @@ def signals_from_bars(bars):
             by_model[model]+=1
             signals.append(dict(model=model, index=i+1, signal_at=at, vector_reason=reason,
                                 cycle=int(cycle), elliott=int(elliott)))
-    return signals,dict(15m_candles=len(bars),complete_1h=len(hourly),complete_1d=len(days),
-                        events=len(cycle_events),by_model=dict(by_model),
-                        vectors=dict(Counter(z["vector"] for z in bars)))
+    return signals,{"candles_15m": len(bars), "complete_1h": len(hourly), "complete_1d": len(days),
+                    "events": len(cycle_events), "by_model": dict(by_model),
+                    "vectors": dict(Counter(z["vector"] for z in bars))}
 
 
 def simulate(bars, candidate, model, year, cost=COST):
