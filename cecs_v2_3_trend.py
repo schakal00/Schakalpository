@@ -32,7 +32,7 @@ WINDOW_CYCLE=45
 WINDOW_WAVE=60
 START=200
 MODELS=("BuyHoldSpot","TrendSpot","TrendSpotQuarter","TrendRisk",
-        "TrendWide6","TrendWide10","TrendVectorWide6","TrendCycleWide6",
+        "TrendWide6","TrendWide10","TrendCycleWide6Delayed","TrendVectorWide6","TrendCycleWide6",
         "TrendVector","TrendCycle","TrendElliott","TrendScore1","TrendScore2")
 
 
@@ -92,11 +92,11 @@ def entry_gate(b,model):
         return True
     if not b["trend"]:
         return False
-    if model in ("TrendSpot","TrendSpotQuarter","TrendRisk","TrendWide6","TrendWide10"):
+    if model in ("TrendSpot","TrendSpotQuarter","TrendRisk","TrendWide6","TrendWide10","TrendCycleWide6Delayed"):
         return True
     if model in ("TrendVector","TrendVectorWide6"):
         return b["vector_confirmed"]
-    if model in ("TrendCycle","TrendCycleWide6"):
+    if model in ("TrendCycle","TrendCycleWide6","TrendCycleWide6Delayed"):
         return b["cycle"]
     if model=="TrendElliott":
         return b["elliott"]
@@ -141,7 +141,8 @@ def backtest(bars,model,cost=COST,force_close_end=True,return_state=False):
         stop=highest=entry=entry_idx=entry_qty=entry_cost=entry_risk=entry_score=None
 
     for i,x in enumerate(bars):
-        yesterday=bars[i-1] if i else None
+        lag = 2 if model=="TrendCycleWide6Delayed" else 1
+        yesterday=bars[i-lag] if i>=lag else None
         # A regime exit was known at the previous day's CLOSE. Fill at today's OPEN.
         if qty>0 and model!="BuyHoldSpot" and yesterday is not None and not yesterday["trend"]:
             close_trade(i,x["open"],"trend_exit")
@@ -166,7 +167,7 @@ def backtest(bars,model,cost=COST,force_close_end=True,return_state=False):
                 init_stop=None
                 unit_risk=None
             elif i-last_exit>COOLDOWN:
-                atr_factor=(10. if model=="TrendWide10" else 6. if model in ("TrendWide6","TrendVectorWide6","TrendCycleWide6") else STOP_ATR)
+                atr_factor=(10. if model=="TrendWide10" else 6. if model in ("TrendWide6","TrendVectorWide6","TrendCycleWide6","TrendCycleWide6Delayed") else STOP_ATR)
                 init_stop=yesterday["close"]-atr_factor*yesterday["atr"] if yesterday["atr"] else None
                 unit_risk=x["open"]*(1+cost)-init_stop*(1-cost) if init_stop else None
                 allocation=min(RISK*cash/unit_risk,cash/(x["open"]*(1+cost))) if unit_risk and unit_risk>0 and init_stop<x["open"] else 0.
@@ -193,7 +194,7 @@ def backtest(bars,model,cost=COST,force_close_end=True,return_state=False):
             # End-of-day update, never applied to the earlier part of this candle.
             if stop is not None and x["atr"]:
                 highest=max(highest,x["high"])
-                atr_factor=(10. if model=="TrendWide10" else 6. if model in ("TrendWide6","TrendVectorWide6","TrendCycleWide6") else STOP_ATR)
+                atr_factor=(10. if model=="TrendWide10" else 6. if model in ("TrendWide6","TrendVectorWide6","TrendCycleWide6","TrendCycleWide6Delayed") else STOP_ATR)
                 stop=max(stop,highest-atr_factor*x["atr"])
             if force_close_end and i==len(bars)-1:
                 close_trade(i,x["close"],"end_of_sample")
@@ -271,7 +272,7 @@ def main():
         periods+=period_stats(e)
         trades+=t
         equity+=e
-        if model in ("TrendWide6","TrendWide10","TrendCycleWide6","TrendVectorWide6","TrendSpotQuarter"):
+        if model in ("TrendWide6","TrendWide10","TrendCycleWide6","TrendCycleWide6Delayed","TrendVectorWide6","TrendSpotQuarter"):
             for bp in (0,5,15,30):
                 alt_stats,alt_eq,alt_trades=backtest(bars,model,cost=bp/10000)
                 review=next(x for x in period_stats(alt_eq) if x["period"]=="historical_review_2022_2026")
