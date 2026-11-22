@@ -1,4 +1,4 @@
-name: CECS 2.4 forward observation journal
+name: CECS 2.5 forward paper journal
 
 on:
   workflow_dispatch:
@@ -9,13 +9,15 @@ on:
     paths:
       - 'daily_watch.py'
       - 'test_daily_watch.py'
+      - 'paper_engine.py'
+      - 'test_paper_engine.py'
       - '.github/workflows/cecs-paper-watch.yml'
 
 permissions:
   contents: write
 
 concurrency:
-  group: cecs-observation-journal
+  group: cecs-forward-paper-journal
   cancel-in-progress: false
 
 jobs:
@@ -29,26 +31,30 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
-      - name: Causality and journal tests
-        run: python -m unittest -v test_daily_watch.py test_trend.py
-      - name: Create dated, prospectively timestamped observation (NO ORDERS)
+      - name: Forward causality and execution tests
+        run: python -m unittest -v test_daily_watch.py test_trend.py test_paper_engine.py
+      - name: Make immutable observation of published daily BTC OHLCV (no orders)
         run: python daily_watch.py --out paper_watch
-      - name: Append-only commit of observation (never edit earlier dates)
+      - name: Capture live Bitstamp quote and update forward-only VIRTUAL ledger
+        run: python paper_engine.py --watch paper_watch --out paper_execution
+      - name: Commit state and daily event together (never edit dated evidence)
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add paper_watch/
+          git add paper_watch/ paper_execution/
           if git diff --cached --quiet; then
-            echo 'No new observation to commit.'
+            echo 'No new forward observation.'
           else
-            git commit -m "paper-watch: UTC close observation $(date -u +%F)"
+            git commit -m "CECS 2.5 UTC paper observation $(date -u +%F)"
             git push
           fi
-      - name: Save dated backup artifact
+      - name: Backup audit and paper state
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: cecs-forward-observation-
-          path: paper_watch/
+          name: cecs-forward-paper-evidence
+          path: |
+            paper_watch/
+            paper_execution/
           retention-days: 90
           if-no-files-found: warn
