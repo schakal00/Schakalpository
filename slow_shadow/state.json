@@ -1,0 +1,25 @@
+{
+  "version": "CECS-2.8-forward-shadow-2026-11-22",
+  "source_code_sha256": "e5de7b255c4a92045a27f01019b0975b2385377f1161af9862b4b78bcd5d095b",
+  "started_utc_date": "2026-11-22",
+  "models": {
+    "BuyHold25": {
+      "cash_usd": 100000.0,
+      "qty_btc": 0.0,
+      "trade_count": 0
+    },
+    "Trend25": {
+      "cash_usd": 100000.0,
+      "qty_btc": 0.0,
+      "trade_count": 0
+    },
+    "TrendVol30Vector": {
+      "cash_usd": 100000.0,
+      "qty_btc": 0.0,
+      "trade_count": 0
+    }
+  },
+  "processed_dates": [
+    "2026-11-22"
+  ]
+}
