@@ -1,0 +1,35 @@
+name: CECS 3.0 realistic 09UTC strategy research
+
+on:
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - 'cecs_v3_0_strategy.py'
+      - 'test_cecs3.py'
+      - '.github/workflows/cecs3-research.yml'
+
+permissions:
+  contents: read
+
+jobs:
+  cecs3:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Causal daily strategy regression suite
+        run: python -m unittest -v test_cecs3.py test_slow.py
+      - name: Historical Bitstamp 1-minute BTC/USD 2019-2026 into 09UTC 15m execution
+        run: python cecs_v3_0_strategy.py --years 2019 2020 2021 2022 2023 2024 2025 2026 --out results_cecs3
+      - name: Preserve priced orders, daily marked equity and assumptions
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: cecs-3-0-research
+          path: results_cecs3/
+          retention-days: 90
+          if-no-files-found: warn
