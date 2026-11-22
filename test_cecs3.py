@@ -102,6 +102,22 @@ class CECSThreeResearchTests(unittest.TestCase):
         high,_,_=m.simulate(d,quotes_for(d),"Hold25",cost_bps=50)
         self.assertLess(high["total_return_pct"],low["total_return_pct"])
 
+    def test_real_15m_to_daily_pipeline_creates_vol_feature(self):
+        # End-to-end representation test; catches missing derived features.
+        start=dt.datetime(2020,1,1,tzinfo=dt.timezone.utc)
+        small=[]
+        for i in range(96*210):
+            px=10000+i*.01
+            small.append(dict(time=start+dt.timedelta(minutes=15*i),
+                open=px,high=px+2,low=px-2,close=px+.5,volume=50))
+        from cecs_v2_6_mw import full_daily
+        from cecs_v2_7_slow import prepare
+        result=m.add_derived_features(prepare(full_daily(small)))
+        self.assertGreaterEqual(len(result),209)
+        self.assertTrue(all("annualized_realized_vol30" in b for b in result))
+        self.assertIsNotNone(result[-1]["annualized_realized_vol30"])
+        self.assertIsInstance(m.declared_weight(result[-1],"CECS3_Defensive"),float)
+
     def test_period_report_start_equity_is_previous_day(self):
         d=daily_bars()
         _,curve,_=m.simulate(d,quotes_for(d),"Trend25")
