@@ -78,5 +78,31 @@ class TrendResearchTests(unittest.TestCase):
             self.assertTrue(0<=result["exposure_pct"]<=100)
 
 
+    def test_delayed_cycle_requires_confirmed_cycle(self):
+        x={"trend": True,"cycle": False,"elliott": False,"vector_confirmed": False,"score": 0}
+        self.assertFalse(m.entry_gate(x,"TrendCycleWide6Delayed"))
+        x["cycle"]=True
+        self.assertTrue(m.entry_gate(x,"TrendCycleWide6Delayed"))
+
+    def test_delayed_entry_uses_two_day_old_candle(self):
+        bars=make_bars(650)
+        for x in bars:
+            x.update(trend=False,cycle=False,elliott=False,vector_confirmed=False,score=0,atr=1.)
+        bars[300]["trend"]=True
+        bars[300]["cycle"]=True
+        stats,eq,trades=m.backtest(bars,"TrendCycleWide6Delayed")
+        self.assertGreaterEqual(len(trades),1)
+        self.assertEqual(trades[0]["entry"],str(bars[302]["date"]))
+
+    def test_running_position_is_not_forced_closed_for_monitoring(self):
+        bars=make_bars(650)
+        for x in bars:
+            x.update(trend=True,cycle=True,elliott=False,vector_confirmed=False,score=1,atr=1.)
+        stats,equity,trades,state=m.backtest(bars,"TrendCycleWide6Delayed",force_close_end=False,return_state=True)
+        self.assertIn("quantity",state)
+        self.assertEqual(len(equity),len(bars))
+        if state["quantity"]>0:
+            self.assertFalse(any(t["reason"]=="end_of_sample" for t in trades))
+
 if __name__=="__main__":
     unittest.main()
