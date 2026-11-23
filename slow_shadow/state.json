@@ -4,9 +4,9 @@
   "started_utc_date": "2026-11-22",
   "models": {
     "BuyHold25": {
-      "cash_usd": 100000.0,
-      "qty_btc": 0.0,
-      "trade_count": 0
+      "cash_usd": 75000.0,
+      "qty_btc": 0.40765083848508177,
+      "trade_count": 1
     },
     "Trend25": {
       "cash_usd": 100000.0,
@@ -20,6 +20,7 @@
     }
   },
   "processed_dates": [
-    "2026-11-22"
+    "2026-11-22",
+    "2026-11-23"
   ]
 }
