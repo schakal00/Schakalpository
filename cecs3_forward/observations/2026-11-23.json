@@ -1,0 +1,56 @@
+{
+  "system_version": "CECS-3.0-DEFENSIVE-FORWARD-2026-11-22",
+  "utc_day": "2026-11-23",
+  "observed_at_utc": "2026-11-23T21:38:38.290519+00:00",
+  "frozen_strategy_sha256": "fe2a51a8aa9ac49904ebc150a7e567f1ca80eea6236aa86d352dbdc98b9dafdd",
+  "signal": {
+    "observed_on_utc_day": "2026-11-23",
+    "most_recent_complete_utc_day": "2026-11-22",
+    "last_actionable_signal_day": "2026-11-21",
+    "source_url": "https://raw.githubusercontent.com/daniegitx1/btc-price-history/main/data/btc_usd_daily.csv",
+    "source_sha256": "fc14815541f50f28064422a1f0bf522a48c4929e8c56591b41429cbb8df0120f",
+    "actionable_features": {
+      "close_usd": 60078.34,
+      "sma50": 77137.8646,
+      "sma200": 72427.404,
+      "realized_vol30": 0.462554,
+      "close_below_sma50": true,
+      "trend_regime": false,
+      "cycle_proxy": true,
+      "vector_proxy": true
+    },
+    "desired_btc_weight": 0.0
+  },
+  "exchange_quote": {
+    "source": "https://www.bitstamp.net/api/v2/ticker/btcusd/",
+    "exchange": "Bitstamp",
+    "symbol": "BTC/USD",
+    "exchange_timestamp_utc": "2026-11-23T21:38:38+00:00",
+    "captured_at_utc": "2026-11-23T21:38:38.290519+00:00",
+    "age_seconds": 0.29,
+    "bid_usd": 61269.95,
+    "ask_usd": 61269.96,
+    "quote_sha256": "04003b6b30283e4747dc5a037998b385fa07d6f4762820f8b40d269d6e2dcca4"
+  },
+  "allocation": {
+    "target_btc_pct": 0.0,
+    "actual_btc_pct": 0.0
+  },
+  "event": {
+    "type": "NO_ACTION"
+  },
+  "virtual_account": {
+    "cash_usd": 100000.0,
+    "btc_quantity": 0.0,
+    "liquidation_equity_usd": 100000.0,
+    "return_since_start_pct": 0.0,
+    "max_observed_drawdown_pct": 0.0,
+    "trades_to_date": 0
+  },
+  "safeguards": [
+    "No real orders, no broker connection, no actual fills.",
+    "Only sampled daily quote snapshots. Intraday losses and overnight gaps are NOT covered by a stop.",
+    "Historical +13.95% was observed on already examined dates; not a forecast.",
+    "Model stays frozen; changes require new version and separate account."
+  ]
+}
