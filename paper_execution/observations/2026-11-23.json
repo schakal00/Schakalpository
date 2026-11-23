@@ -1,0 +1,32 @@
+{
+  "recorded_utc": "2026-11-23T20:57:53.428449+00:00",
+  "utc_date": "2026-11-23",
+  "closed_day": "2026-11-22",
+  "feature_age_days": 1,
+  "exchange_quote": {
+    "source": "https://www.bitstamp.net/api/v2/ticker/btcusd/",
+    "exchange": "Bitstamp",
+    "symbol": "BTC/USD",
+    "exchange_timestamp_utc": "2026-11-23T20:57:51+00:00",
+    "captured_at_utc": "2026-11-23T20:57:53.428449+00:00",
+    "age_seconds": 2.43,
+    "bid_usd": 61179.78,
+    "ask_usd": 61179.79,
+    "quote_sha256": "877a80bdbf1335ce0589253382db20fd672beb47486b886c9253d8e8af040a55"
+  },
+  "strategy_version": "CECS-2.5-FORWARD-PAPER-2026-11-22",
+  "model": "TrendCycleWide6Delayed",
+  "observed_gate": false,
+  "events": [
+    {
+      "type": "no_action"
+    }
+  ],
+  "paper_cash_usd": 100000.0,
+  "paper_qty_btc": 0.0,
+  "paper_equity_usd": 100000.0,
+  "paper_stop_usd": null,
+  "realized_pnl_usd": 0.0,
+  "pending_intent": null,
+  "warning": "Virtual trade assumptions at sampled ticker quotes. NOT real fills. Daily monitoring misses intra-day stops; simulated risk can exceed nominal 0.5%."
+}

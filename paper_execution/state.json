@@ -14,7 +14,8 @@
   "pending": null,
   "last_exit_date": null,
   "processed_dates": [
-    "2026-11-22"
+    "2026-11-22",
+    "2026-11-23"
   ],
   "realized_pnl_usd": 0.0,
   "closed_trades": 0
