@@ -1,0 +1,82 @@
+{
+  "version": "CECS-2.8-forward-shadow-2026-11-22",
+  "date": "2026-11-28",
+  "captured_at_utc": "2026-11-28T17:29:38.295326+00:00",
+  "source": {
+    "observation_day": "2026-11-28",
+    "source_last_completed_day": "2026-11-27",
+    "source_signal_day": "2026-11-26",
+    "source_sha256": "0959a184637a5969a04fdd641c87a7200f94fb531b4b6367463c2679107c21dc",
+    "source_url": "https://raw.githubusercontent.com/daniegitx1/btc-price-history/main/data/btc_usd_daily.csv",
+    "known_features": {
+      "close_usd": 60492.37,
+      "sma50_usd": 74680.97219999992,
+      "sma200_usd": 71919.78325000001,
+      "realized_vol30": 0.4770514150509317,
+      "uptrend": false,
+      "cycle_proxy": false,
+      "vector_proxy": true
+    },
+    "weights": {
+      "BuyHold25": 0.25,
+      "Trend25": 0.0,
+      "TrendVol30Vector": 0.0
+    }
+  },
+  "exchange_quote": {
+    "source": "https://www.bitstamp.net/api/v2/ticker/btcusd/",
+    "exchange": "Bitstamp",
+    "symbol": "BTC/USD",
+    "exchange_timestamp_utc": "2026-11-28T17:29:38+00:00",
+    "captured_at_utc": "2026-11-28T17:29:38.295326+00:00",
+    "age_seconds": 0.3,
+    "bid_usd": 59459.01,
+    "ask_usd": 59459.02,
+    "quote_sha256": "b62b6bdc0209a57e7ff319b44cf48def963cc9b9491561022a97a7af687baca7"
+  },
+  "portfolios": {
+    "BuyHold25": {
+      "target_weight_pct": 25.0,
+      "observed_weight_pct": 24.4245,
+      "paper_cash_usd": 75000.0,
+      "paper_qty_btc": 0.4076508385,
+      "paper_liquidation_equity_usd": 99202.1575,
+      "paper_return_since_start_pct": -0.797842,
+      "total_virtual_orders": 1,
+      "event": {
+        "side": "NO_ACTION"
+      }
+    },
+    "Trend25": {
+      "target_weight_pct": 0.0,
+      "observed_weight_pct": 0.0,
+      "paper_cash_usd": 100000.0,
+      "paper_qty_btc": 0.0,
+      "paper_liquidation_equity_usd": 100000.0,
+      "paper_return_since_start_pct": 0.0,
+      "total_virtual_orders": 0,
+      "event": {
+        "side": "NO_ACTION"
+      }
+    },
+    "TrendVol30Vector": {
+      "target_weight_pct": 0.0,
+      "observed_weight_pct": 0.0,
+      "paper_cash_usd": 100000.0,
+      "paper_qty_btc": 0.0,
+      "paper_liquidation_equity_usd": 100000.0,
+      "paper_return_since_start_pct": 0.0,
+      "total_virtual_orders": 0,
+      "event": {
+        "side": "NO_ACTION"
+      }
+    }
+  },
+  "caveats": [
+    "These are new prospective VIRTUAL observations; no historical returns imported",
+    "No live orders, no broker integration, no actual fills",
+    "One quote per day cannot detect all intraday losses; no risk guarantee",
+    "The 09:00 UTC quote is not the historical midnight open used in backtests",
+    "Models were selected after earlier retrospective comparisons, so historical performance is contaminated by selection"
+  ]
+}
